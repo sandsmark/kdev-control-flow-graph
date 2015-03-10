@@ -19,16 +19,14 @@
 
 #include "duchaincontrolflowjob.h"
 
-#include <KLocale>
-
-#include <ThreadWeaver/Weaver>
+#include <ThreadWeaver/Queue>
 
 #include <interfaces/icore.h>
 #include <interfaces/iuicontroller.h>
 #include <interfaces/iruncontroller.h>
 
-#include <KDebug>
-
+#include <klocalizedstring.h>
+#include <QDebug>
 DUChainControlFlowJob::DUChainControlFlowJob(const QString &jobName, DUChainControlFlow *duchainControlFlow)
  : m_duchainControlFlow(duchainControlFlow),
    m_plugin(0),
@@ -71,13 +69,14 @@ void DUChainControlFlowJob::setControlFlowJobType(DUChainControlFlowInternalJob:
 
 void DUChainControlFlowJob::start()
 {
+    qDebug() << Q_FUNC_INFO << "LOL";
     emit showProgress(this, 0, 0, 0);
     emit showMessage(this, objectName());
 
     m_internalJob = new DUChainControlFlowInternalJob(m_duchainControlFlow, m_plugin);
     m_internalJob->setControlFlowJobType(m_controlFlowJobType);
-    connect(m_internalJob, SIGNAL(done(ThreadWeaver::Job*)), SLOT(done(ThreadWeaver::Job*)));
-    ThreadWeaver::Weaver::instance()->enqueue(m_internalJob);
+    connect(m_internalJob, SIGNAL(done()), SLOT(done()));
+    ThreadWeaver::Queue::instance()->enqueue(ThreadWeaver::JobPointer(m_internalJob));
 }
 
 bool DUChainControlFlowJob::doKill()
@@ -86,9 +85,9 @@ bool DUChainControlFlowJob::doKill()
     return false;
 }
 
-void DUChainControlFlowJob::done(ThreadWeaver::Job *job)
+void DUChainControlFlowJob::done()
 {
-    job->deleteLater();
+    qDebug() << Q_FUNC_INFO << "LOL";
     emit hideProgress(this);
     emit clearMessage(this);
 

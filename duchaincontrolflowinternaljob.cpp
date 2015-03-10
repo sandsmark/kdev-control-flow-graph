@@ -21,7 +21,7 @@
 
 #include "duchaincontrolflow.h"
 #include "kdevcontrolflowgraphviewplugin.h"
-
+#include <QDebug>
 DUChainControlFlowInternalJob::DUChainControlFlowInternalJob(DUChainControlFlow *duchainControlFlow, KDevControlFlowGraphViewPlugin *plugin)
  : m_duchainControlFlow(duchainControlFlow),
    m_plugin(plugin),
@@ -42,13 +42,14 @@ void DUChainControlFlowInternalJob::requestAbort()
 {
     if (m_plugin)
     {
-        kDebug() << "Requesting abort";
+        qDebug() << "Requesting abort";
         m_plugin->requestAbort();
     }
 }
 
-void DUChainControlFlowInternalJob::run()
+void DUChainControlFlowInternalJob::run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread *thread)
 {
+    qDebug() << Q_FUNC_INFO << "LOL";
     switch(m_controlFlowJobType)
     {
         case ControlFlowJobInteractive:
@@ -76,4 +77,5 @@ void DUChainControlFlowInternalJob::run()
             break;
         }
     };
+    emit done();
 }
