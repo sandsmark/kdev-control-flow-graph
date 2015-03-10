@@ -71,5 +71,3 @@ target_link_libraries(kdevcontrolflowgraphview
     KDev::Util
     gvc cgraph cdt)
 
-#kcoreaddons_desktop_to_json(kdevcontrolflowgraphview ${CMAKE_CURRENT_BINARY_DIR}/kdevcontrolflowgraphview.desktop)
-#configure_file(kdevcontrolflowgraphview.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevcontrolflowgraphview.desktop)
